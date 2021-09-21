@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  background-color: #2a9d8f;
+}
+
+.App > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  font-family: sans-serif;
+}
+
+input {
+  grid-column: 1/6;
+  width: 80%;
+  margin: 20px auto 10px;
+  padding: 15px;
+  border-radius: 30px;
+  border: 5px solid #e76f51;
+}
+
+.card-pais {
+  border: 5px solid #e76f51;
+  padding: 15% 15% 10%;
+  margin: 10px;
+  border-radius: 20px;
+  background-color: #f4a261;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-pais img {
+  align-self: center;
+}
+
+a {
+  font-weight: bold;
+  font-size: large;
+  color: #264653;
+  text-decoration: none;
+}
