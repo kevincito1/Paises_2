@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import Countries from "../components/Countries";
+import React, { useState, fragment } from "react";
+import GeneralDataCountries from "../components/GeneralDataCountries";
 import urlApi from "../assets/useFetchDataCountries";
 
 const Home = () => {
   const { data } = urlApi("https://restcountries.eu/rest/v2/all");
   const [searchTerm, setSearchterm] = useState("");
   const [initialPosition, setInitialPosition] = useState(0);
-  const [finalPosition, setFinalPosition] = useState(6);
+  const [finalPosition, setFinalPosition] = useState(10);
 
   const doNext = () => {
     if(finalPosition < data.length)
@@ -15,11 +15,11 @@ const Home = () => {
   };
 
   const nextInitial = () => {
-    setInitialPosition(initialPosition + 6);
+    setInitialPosition(initialPosition + 10);
   };
 
   const nextFinal = () => {
-    setFinalPosition(finalPosition + 6);
+    setFinalPosition(finalPosition + 10);
   };
 
   const doPrev = () => {
@@ -29,13 +29,25 @@ const Home = () => {
   };
 
   const prevInitial = () => {
-    setInitialPosition(initialPosition - 6);
+    setInitialPosition(initialPosition - 10);
   };
 
   const prevFinal = () => {
-    setFinalPosition(finalPosition - 6);
+    setFinalPosition(finalPosition - 10);
   };
+
+  const dataSearch = data.map((country) => {
+    if(country.name.toLowerCase().includes(searchTerm.toLowerCase())){
+      return country;
+    }
+  });
+
+  const fixedData = dataSearch.filter((country) => {
+    return country !== undefined;
+  });
+
   return (
+    <fragment>
     <div>
       <input
         type="text"
@@ -44,10 +56,10 @@ const Home = () => {
           setSearchterm(event.target.value);
         }}
       />
-      {data.slice(initialPosition, finalPosition).map((country) => {
-        if (country.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+      {fixedData.slice(initialPosition, finalPosition).map((country) => {
+        if (country !== undefined) {
           return (
-            <Countries
+            <GeneralDataCountries
               key={country.numericCode}
               flag={country.flag}
               name={country.name}
@@ -59,8 +71,8 @@ const Home = () => {
           );
         } else if (searchTerm === "") {
           return (
-            <Countries
-              key={country.capital}
+            <GeneralDataCountries
+              key={country.numericCode}
               flag={country.flag}
               name={country.name}
               capital={country.capital}
@@ -70,10 +82,11 @@ const Home = () => {
             />
           );
         } else return [];
-      })}
-      <button onClick={doPrev}>Prev</button> 
-      <button onClick={doNext}>Next</button>
+      })}      
     </div>
+    <button onClick={doPrev}>Prev</button> 
+    <button onClick={doNext}>Next</button>    
+    </fragment>
   );
 };
 export default Home;

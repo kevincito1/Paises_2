@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Details from "../components/Details.jsx";
 // import urlApi from "../assets/useFetchDataCountries";
 import { useParams } from "react-router-dom";
+import Weather from '../components/Weather';
+
 
 const Pais = () => {
   const { id } = useParams();
@@ -33,50 +35,49 @@ const Pais = () => {
     population,
     topLevelDomain,
     nativeName,
-    alpha2Code
+    alpha2Code,
   } = countries;
 
   useEffect(() => {
     const consultWeather = async () => {
-      if (!countries) return;
-
       const apiKey = `6283dbbf2c422b124b45da6563daa4bc`;
-
       const url2 = `https://api.openweathermap.org/data/2.5/weather?q=${id},${alpha2Code}&appid=${apiKey}`;
-
       const response = await fetch(url2);
       const result = await response.json();
-
       setWeather(result);
     };
     consultWeather();
-  }, [id,countries]);
-
-  const { weather, main } = weatherData;
-
+  }, [id, countries]);
+  console.log(weatherData);
+  const { weather, main, coord, wind } = weatherData;
   return (
     <div>
-        {/* {weather &&
-                  weather.map((desc) => {
-                    return <span key={id}>{desc.description}</span>;
-                  })}
-                   <p>
-                <i className="fas fa-temperature-low"></i>
-                {main && parseFloat(main.temp - 273.15).toFixed(2)}{' '}
-                <span>&#x2103;</span>
-              </p> */}
+      {/* {weather && weather.map((forecast) => {
+          return (
+            <span key={id} className="forecast">
+              {forecast.description}
+            </span>
+          );
+        })} */}
+      {/* <p>{main && parseFloat(main.temp - 273.15).toFixed(2)} </p> */}
       <Details
         name={name}
         key={numericCode}
         flag={flag}
-        
         capital={capital}
         demonym={demonym}
         region={region}
         population={population}
         topLevelDomain={topLevelDomain}
         nativeName={nativeName}
-      />      
+      />
+      
+      {weather && <Weather 
+      weather={weather}
+      main={main}
+      coord={coord}
+      wind={wind}      
+      />}
     </div>
   );
 };
